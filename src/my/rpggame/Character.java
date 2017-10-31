@@ -20,12 +20,14 @@ public class Character {
 	static int health;
 	volatile boolean run;
 
+	private Image imageLeft;
+	private Image imageRight;
 	private Image image;
 	private int x;
 	private int y;
 	private int dx;
 	private int dy;
-	
+
 	private ArrayList<String> characters = new ArrayList<>();
 
 	/* String healthStatement;
@@ -38,24 +40,24 @@ public class Character {
 	int enemiesKilled = 0;
 
 	Character(String in) {
-		
+
 		characters.add("knight");
 		characters.add("mage");
-		
+
 		Scanner sc = new Scanner(System.in);
-		
+
 		String input = in;
 		while(!characters.contains(input)) {
 			System.out.println("Please enter a valid character.\nYour choices are: ");
-			
+
 			for(String n : characters) {
 				System.out.println(StringUtils.capitalize(n));
 			}
 			input = sc.nextLine();
 		}
-		
 
-		
+
+
 		switch (input) {
 		case "knight": 
 			maxHealth=100;
@@ -72,15 +74,33 @@ public class Character {
 		default: 
 			System.out.println("You didn't select a character.");
 			break; } 
-		ImageIcon ii = new ImageIcon(input + ".png");
-        image = ii.getImage();
+		ImageIcon il = new ImageIcon(input + "_left.png");
+		imageLeft = il.getImage();
+		ImageIcon ir = new ImageIcon(input + "_right.png");
+		imageRight = ir.getImage();
+		image = imageRight;
+		
 		x = 40;
 		y = 60;
 	}
 
 	public void move() {
-		x += dx;
-		y += dy;
+		
+		if(x+dx>=750) {
+			x = 750;
+		} else if(x+dx<=0) {
+			x=0;
+		} else {
+			x += dx;
+		}
+		
+		if(y+dy>=525) {
+			y=525;
+		} else if(y+dy<=0) {
+			y=0;
+		} else {
+			y += dy;
+		}
 	}
 
 	public int getX() {
@@ -94,17 +114,19 @@ public class Character {
 	public Image getImage() {
 		return image;
 	}
-
+	
 	public void keyPressed(KeyEvent e) {
 
 		int key = e.getKeyCode();
 
 		if(key == KeyEvent.VK_LEFT) {	
 			dx -= 1;
+			image = imageLeft;
 		}
 
 		if(key == KeyEvent.VK_RIGHT) {
 			dx += 1;
+			image = imageRight;
 		}
 
 		if(key == KeyEvent.VK_UP) {

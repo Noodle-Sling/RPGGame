@@ -26,7 +26,7 @@ public class World extends JPanel implements ActionListener{
 	}
 	
 	private void initWorld() {
-		
+		setBounds(0, 0, 800, 578);
 		addKeyListener(new TAdapter());
 		setFocusable(true);
 		setBackground(Color.BLACK);
