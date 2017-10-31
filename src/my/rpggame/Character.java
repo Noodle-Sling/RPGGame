@@ -5,8 +5,15 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+
+import com.sun.xml.internal.ws.util.StringUtils;
 
 public class Character {
 	int maxHealth;
@@ -18,6 +25,8 @@ public class Character {
 	private int y;
 	private int dx;
 	private int dy;
+	
+	private ArrayList<String> characters = new ArrayList<>();
 
 	/* String healthStatement;
 	switch (health) {
@@ -28,8 +37,25 @@ public class Character {
 	int gold = 0;
 	int enemiesKilled = 0;
 
-	Character(String input) {
+	Character(String in) {
+		
+		characters.add("knight");
+		characters.add("mage");
+		
+		Scanner sc = new Scanner(System.in);
+		
+		String input = in;
+		while(!characters.contains(input)) {
+			System.out.println("Please enter a valid character.\nYour choices are: ");
+			
+			for(String n : characters) {
+				System.out.println(StringUtils.capitalize(n));
+			}
+			input = sc.nextLine();
+		}
+		
 
+		
 		switch (input) {
 		case "knight": 
 			maxHealth=100;
@@ -41,14 +67,13 @@ public class Character {
 			maxHealth=50;
 			health=50;
 			dmgDice=3;
-
 			System.out.println("Congratulations, you have chosen mage!");
 			break;
 		default: 
 			System.out.println("You didn't select a character.");
 			break; } 
-		BufferedImage ii = scaleImage(50,50,"/RPGGame/img/"+input+".gif");
-		image = ii;
+		ImageIcon ii = new ImageIcon(input + ".png");
+        image = ii.getImage();
 		x = 40;
 		y = 60;
 	}
