@@ -25,7 +25,6 @@ public class MyFrame extends JFrame {
 	
 	private JPanel contentPane;
 	private StartScreen startScreen;
-	
 	private String input;
 	private JButton btnMage;
 	private JButton btnKnight;

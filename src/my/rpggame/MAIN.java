@@ -5,11 +5,6 @@ public class MAIN {
 	static String input = "" ;
 	int gameState = 0;
 	public static void main(String[] args) {
-		
-//		System.out.println("Welcome to our first RPG! Choose your character: type \"Knight\" or \"Mage.\"");
-//		Scanner sc = new Scanner(System.in);
-//		String input = sc.nextLine().toLowerCase();
-//		Character player = new Character(input);
 		MyFrame.startGUI();
 		gameLoop();
 			

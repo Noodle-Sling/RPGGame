@@ -79,7 +79,6 @@ public class Character {
 		ImageIcon ir = new ImageIcon(input + "_right.png");
 		imageRight = ir.getImage();
 		image = imageRight;
-		
 		x = 40;
 		y = 60;
 	}

@@ -75,6 +75,5 @@ public class StartScreen extends JPanel {
 		gbc_btnMage.gridx = 4;
 		gbc_btnMage.gridy = 6;
 		add(btnMage, gbc_btnMage);
-		
 	}
 }
