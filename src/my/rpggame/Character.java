@@ -27,6 +27,7 @@ public class Character {
 	private int y;
 	private int dx;
 	private int dy;
+	private boolean pause;
 
 	private ArrayList<String> characters = new ArrayList<>();
 
@@ -44,36 +45,23 @@ public class Character {
 		characters.add("knight");
 		characters.add("mage");
 
-		Scanner sc = new Scanner(System.in);
-
 		String input = in;
-		while(!characters.contains(input)) {
-			System.out.println("Please enter a valid character.\nYour choices are: ");
-
-			for(String n : characters) {
-				System.out.println(StringUtils.capitalize(n));
-			}
-			input = sc.nextLine();
-		}
-
-
 
 		switch (input) {
 		case "knight": 
 			maxHealth=100;
 			health=100;
 			dmgDice=2;
-			System.out.println("Congratulations, you have chosen knight!");
 			break;
 		case "mage": 
 			maxHealth=50;
 			health=50;
 			dmgDice=3;
-			System.out.println("Congratulations, you have chosen mage!");
 			break;
 		default: 
 			System.out.println("You didn't select a character.");
-			break; } 
+			break; 
+		} 
 		ImageIcon il = new ImageIcon(input + "_left.png");
 		imageLeft = il.getImage();
 		ImageIcon ir = new ImageIcon(input + "_right.png");
@@ -84,7 +72,7 @@ public class Character {
 	}
 
 	public void move() {
-		
+
 		if(x+dx>=750) {
 			x = 750;
 		} else if(x+dx<=0) {
@@ -92,7 +80,7 @@ public class Character {
 		} else {
 			x += dx;
 		}
-		
+
 		if(y+dy>=525) {
 			y=525;
 		} else if(y+dy<=0) {
@@ -113,27 +101,28 @@ public class Character {
 	public Image getImage() {
 		return image;
 	}
-	
+
 	public void keyPressed(KeyEvent e) {
+		if(!pause) {
+			int key = e.getKeyCode();
 
-		int key = e.getKeyCode();
+			if(key == KeyEvent.VK_LEFT) {	
+				dx -= 1;
+				image = imageLeft;
+			}
 
-		if(key == KeyEvent.VK_LEFT) {	
-			dx -= 1;
-			image = imageLeft;
-		}
+			if(key == KeyEvent.VK_RIGHT) {
+				dx += 1;
+				image = imageRight;
+			}
 
-		if(key == KeyEvent.VK_RIGHT) {
-			dx += 1;
-			image = imageRight;
-		}
+			if(key == KeyEvent.VK_UP) {
+				dy -= 1;
+			}
 
-		if(key == KeyEvent.VK_UP) {
-			dy -= 1;
-		}
-
-		if(key == KeyEvent.VK_DOWN) {
-			dy += 1;
+			if(key == KeyEvent.VK_DOWN) {
+				dy += 1;
+			}
 		}
 	}
 
@@ -200,6 +189,10 @@ public class Character {
 					}
 				}
 			});
+
+	public void setPause(boolean z) {
+		this.pause = z;
+	}
 
 	public BufferedImage scaleImage(int WIDTH, int HEIGHT, String filename) {
 		BufferedImage bi = null;

@@ -45,32 +45,42 @@ public class MyFrame extends JFrame {
 		}
 	};
 	
+	private ActionListener mainMenu = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			mainMenu();
+		}
+	};
+	
 
 	public MyFrame() {
-
-		mainMenu();
-	}
-
-	private void mainMenu() {
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(800, 600);
 		setResizable(false);
+		setLocationRelativeTo(null);
 		setTitle("RPG Game");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		mainMenu();
+	}
+	
+	private void mainMenu() {
+		contentPane.removeAll();
+		contentPane.revalidate();
+		contentPane.repaint();
 		startScreen = new StartScreen(knight, mage);
 		contentPane.add(startScreen);
-		
 	}
 	
 	private void startGame() {
 		contentPane.removeAll();
 		contentPane.revalidate();
 		Character main = new Character(input);
-		contentPane.add(new World(main));
+		contentPane.add(new World(main, mainMenu));
 		contentPane.requestDefaultFocus();
 		
 	}
