@@ -62,9 +62,9 @@ public class Character {
 			System.out.println("You didn't select a character.");
 			break; 
 		} 
-		ImageIcon il = new ImageIcon(input + "_left.png");
+		ImageIcon il = new ImageIcon("Resources/" + input + "_left.png");
 		imageLeft = il.getImage();
-		ImageIcon ir = new ImageIcon(input + "_right.png");
+		ImageIcon ir = new ImageIcon("Resources/" +input + "_right.png");
 		imageRight = ir.getImage();
 		image = imageRight;
 		x = 40;
