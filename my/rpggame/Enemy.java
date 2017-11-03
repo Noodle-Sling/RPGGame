@@ -27,8 +27,9 @@ public class Enemy {
 			System.out.println("A wolf ambushes you! Health: " + health);
 			break;
 		default: 
-			break; } 
-		}
+			break;
+		} 
+	}
 	
 	void attack (Character player) {
 		if (health > 0) {

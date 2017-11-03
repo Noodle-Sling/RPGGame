@@ -2,31 +2,7 @@ package my.rpggame;
 import java.util.Scanner;
 
 public class RPGRunner {
-	public static void main(String[] args) {
-		/* System.out.println("Welcome to OurFirstRPG, please choose your character: Knight or Mage.");
-		Scanner sc = new Scanner(System.in);
-		input = sc.nextLine().toLowerCase();
-		Character player = new Character (input);
-		Enemy enemy = new Enemy (1+(int)(Math.random()*2));
-		player.run = true;
-		player.isDead.start() ;
-		while (!input.equals("start") && !input.equals("quit")) { 
-			System.out.println("Now that you have chosen a character, you are ready to start your journey. Type \"Start\" to begin");
-			input = sc.nextLine().toLowerCase();
-			if (input.equals("quit")) {
-				System.out.println("Thank you for playing.") ;
-				sc.close();
-			};
-		}
-		
-		System.out.println("A " + enemy.name + " appears! Attack the " + enemy.name + " by typing \"Attack\", Check your character's status by typing \"Status\".");
-		while (!input.equals("quit") && player.run) {
-			input = sc.nextLine().toLowerCase();
-			combatActions(input, player, enemy);
-		}
-
-	} */
-		
+	public static void main(String[] args) {		
 		Scanner sc = new Scanner(System.in);
 		String input = "";
 		System.out.println("Welcome to our first RPG! Type \"Start\" to begin.");
@@ -68,7 +44,7 @@ public class RPGRunner {
 					}
 				case 1:
 					Enemy enemy = new Enemy (1+(int)(Math.random()*2));
-					System.out.println("To attack the enemy, type \"Attack.\" To check your character's status in the future, type \"Status.\"");
+					System.out.println("To attack an enemy, type \"Attack.\" To check your character's status in the future, type \"Status.\"");
 					while (enemy.health > 0) {
 						input = sc.nextLine().toLowerCase();
 						combatActions(input, player, enemy);
@@ -87,46 +63,3 @@ public class RPGRunner {
 	}
 	
 }
-
-/* static double[] getCoefficients() {
-	Scanner sc = new Scanner(System.in);
-	String input = "";
-	double[] nums = new double[3];
-	int varAsk = 0;
-	while (varAsk < 3) {
-	switch (varAsk) {
-	case 0:
-		System.out.println("A?");
-			input = sc.nextLine();
-			if (catchInput(input)) {
-				if (Double.valueOf(input) == 0) {
-				System.out.println("You entered zero for A, but the leading coefficient must have a nonzero value. A has been recorded as one.");
-				nums[0] = 1;
-				}
-				else nums[0] = Double.valueOf(input);
-				varAsk++;
-			}
-			else System.out.println("Please enter a numerical value in decimal form.");
-		break;
-	case 1:
-		System.out.println("B?");
-			input = sc.nextLine();
-			if (catchInput(input)) {
-			nums[1] = Double.valueOf(input);
-			varAsk++;
-			}
-			else System.out.println("Please enter a numerical value in decimal form.");
-		break;
-	case 2:
-		System.out.println("C?");
-			input = sc.nextLine();
-			if (catchInput(input)) {
-			nums[2] = Double.valueOf(input);
-			varAsk++;
-			}
-			else System.out.println("Please enter a numerical value in decimal form.");
-		break;		
-}
-}
-	return nums;
-} */

@@ -33,8 +33,9 @@ public class Character {
 			break;
 		default: 
 			System.out.println("You didn't select a character.");
-			break; } 
-		}
+			break;
+		} 
+	}
 	
 	int calcDmg() {
 		return minDmg + (int)((maxDmg - minDmg + 1) * Math.random());
