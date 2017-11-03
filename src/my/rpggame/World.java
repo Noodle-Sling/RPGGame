@@ -3,35 +3,31 @@ package my.rpggame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Component;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import java.awt.Font;
-import javax.swing.JButton;
-import java.awt.Insets;
 
 public class World extends JPanel implements ActionListener{
 
 	private Timer timer;
 	private final int DELAY = 10;
-	Character player;
+	
+	private final int[][] pos = {
+	        {790, 259}, {660, 50}, {540, 90},
+	        {790, 220}, {790, 20}, {740, 180},
+	        {790, 128}, {490, 170}, {700, 30}
+	};
+
+	public Character player;
 	public boolean pause;
+	public ArrayList<Enemy> enemies = new ArrayList<>();
 
 	private ActionListener resume = new ActionListener() {
 		@Override
@@ -49,14 +45,17 @@ public class World extends JPanel implements ActionListener{
 		setLayout(null);
 		addKeyListener(new TAdapter());
 
-		initUI();
-		timer = new Timer(DELAY, this);
-		timer.start();
+		gameLoop();
+
+
 	}
 
 	private void initUI() {
 		pause = false;
 		player.setPause(false);
+		for(Enemy n : enemies) {
+			n.setPause(false);
+		}
 		removeAll();
 		revalidate();
 		requestDefaultFocus();
@@ -67,57 +66,23 @@ public class World extends JPanel implements ActionListener{
 
 	private void pauseMenu() {
 
-		JPanel panel = new JPanel();
-		panel.setOpaque(false);
-		panel.setBounds(new Rectangle(0, 0, 800, 600));
-		add(panel);
-		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{348, 0, 0};
-		gbl_panel.rowHeights = new int[]{178, 0, 0, 0, 0, 0};
-		gbl_panel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		panel.setLayout(gbl_panel);
-
-		JLabel lblNewLabel = new JLabel("Pause");
-		lblNewLabel.setForeground(Color.WHITE);
-		lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 34));
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNewLabel.gridx = 1;
-		gbc_lblNewLabel.gridy = 1;
-		panel.add(lblNewLabel, gbc_lblNewLabel);
-
-		JPanel panelResume = new JPanel();
-		panelResume.setBackground(Color.WHITE);
-		GridBagConstraints gbc_panelResume = new GridBagConstraints();
-		gbc_panelResume.insets = new Insets(0, 0, 5, 0);
-		gbc_panelResume.fill = GridBagConstraints.BOTH;
-		gbc_panelResume.gridx = 1;
-		gbc_panelResume.gridy = 3;
-		panel.add(panelResume, gbc_panelResume);
-
-		JButton btnResume = new JButton("Resume");
-		btnResume.addActionListener(resume);
-		panelResume.add(btnResume);
-		btnResume.setForeground(Color.BLACK);
-		btnResume.setBorderPainted(false);
-		panelResume.setPreferredSize(panelResume.getPreferredSize());
-
-		JPanel panel_1 = new JPanel();
-		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-		gbc_panel_1.fill = GridBagConstraints.BOTH;
-		gbc_panel_1.gridx = 1;
-		gbc_panel_1.gridy = 4;
-		panel.add(panel_1, gbc_panel_1);
-
-		JButton btnReturnToMain = new JButton("Return to Main Menu");
-		btnReturnToMain.addActionListener(mainMenu);
-		btnReturnToMain.setBorderPainted(false);
-		btnReturnToMain.setContentAreaFilled(false);
-		panel_1.add(btnReturnToMain);
-		panel_1.setPreferredSize(panel_1.getPreferredSize());
+		add(new PauseMenu(mainMenu, resume));
+		revalidate();
 
 
+	}
+	
+	private void initEnemies() {
+		for(int[] p : pos) {
+			enemies.add(new Enemy(p[0], p[1]));
+		}
+	}
+
+	private void gameLoop() {
+		initUI();
+		initEnemies();
+		timer = new Timer(DELAY, this);
+		timer.start();
 	}
 
 	@Override
@@ -133,13 +98,70 @@ public class World extends JPanel implements ActionListener{
 
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.drawImage(player.getImage(), player.getX(), player.getY(), this);
+		for(Enemy n : enemies) {
+			g2d.drawImage(n.getImage(), n.getX(), n.getY(), this);
+			ArrayList ms = n.getArrows();
+			for(Object j : ms) {
+				Arrow m = (Arrow) j;
+				g2d.drawImage(m.getImage(), m.getX(), m.getY(), this);
+			}
+		}
+
+	}
+
+	private void updateArrows() {
+		for(Enemy n : enemies) {
+			ArrayList ms = n.getArrows();
+			for(int i = 0; i < ms.size(); i++) {
+
+				Arrow m = (Arrow) ms.get(i);
+
+				if(m.isVisible()) {
+					m.move();
+				}
+				else {
+					ms.remove(i);
+				}
+			}
+		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if(!player.run) {
+			timer.stop();
+			repaint();
+			updateArrows();
+			endGame();
+		}
+		if(!pause && player.run) {
 
-		player.move();
-		repaint();
+			player.move();
+			for(Enemy n : enemies) {
+				n.move();
+				updateArrows();
+			}
+			checkCollisions();
+
+			repaint();
+		}
+	}
+
+	public void checkCollisions() {
+		Rectangle r1 = player.getBounds();
+		for(Enemy n : enemies) {
+			ArrayList<Arrow> ms = n.getArrows();
+			for(Arrow j : ms) {
+				Rectangle r2 = j.getBounds();
+
+				if(r1.intersects(r2)) {
+					n.attack(player);
+					j.setVis(false);
+					
+					System.out.println("Hit. Health: " + player.getHealth());
+				}
+			}
+		}
 	}
 
 	private class TAdapter extends KeyAdapter {
@@ -151,6 +173,9 @@ public class World extends JPanel implements ActionListener{
 				pauseMenu();
 				pause = true;
 				player.setPause(true);
+				for(Enemy n : enemies) {
+					n.setPause(true);
+				}
 			}
 		}
 
@@ -158,5 +183,10 @@ public class World extends JPanel implements ActionListener{
 		public void keyPressed(KeyEvent e) {
 			player.keyPressed(e);
 		}
+	}
+	
+	public void endGame() {
+		add(new PlayerDied(mainMenu));
+		revalidate();
 	}
 }

@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Component;
 import java.awt.Dimension;
+import javax.swing.SwingConstants;
 
 public class StartScreen extends JPanel {
 
@@ -25,6 +26,8 @@ public class StartScreen extends JPanel {
 	public String input = "";
 	private JPanel panelKnight;
 	private JPanel panelMage;
+	private JPanel panelQuit;
+	private JButton btnQuit;
 	
 	public StartScreen(ActionListener knight, ActionListener mage) {
 		this.knight = knight;
@@ -38,15 +41,14 @@ public class StartScreen extends JPanel {
 		setFocusable(true);
 		GridBagLayout gbl_startScreen = new GridBagLayout();
 		gbl_startScreen.columnWidths = new int[]{256, 0, 0};
-		gbl_startScreen.rowHeights = new int[]{44, 194, 46, 0, 44, 0};
+		gbl_startScreen.rowHeights = new int[]{44, 194, 46, 0, 44, 44, 0, 0};
 		gbl_startScreen.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		gbl_startScreen.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_startScreen.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gbl_startScreen);
 		
 		JLabel intro = new JLabel("Welcome to our first RPG! Choose your character:");
 		GridBagConstraints gbc_lblintro = new GridBagConstraints();
 		gbc_lblintro.insets = new Insets(0, 0, 5, 0);
-		gbc_lblintro.anchor = GridBagConstraints.NORTH;
 		gbc_lblintro.gridx = 1;
 		gbc_lblintro.gridy = 2;
 		add(intro, gbc_lblintro);
@@ -80,6 +82,7 @@ public class StartScreen extends JPanel {
 		fl_panelMage.setHgap(0);
 		panelMage.setPreferredSize(new Dimension(85, 29));
 		GridBagConstraints gbc_panelMage = new GridBagConstraints();
+		gbc_panelMage.insets = new Insets(0, 0, 5, 0);
 		gbc_panelMage.gridx = 1;
 		gbc_panelMage.gridy = 4;
 		add(panelMage, gbc_panelMage);
@@ -94,5 +97,29 @@ public class StartScreen extends JPanel {
 		btnMage.setFocusPainted(false); 
 		btnMage.setOpaque(false);
 		panelMage.setPreferredSize(panelMage.getPreferredSize());
+		
+		panelQuit = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) panelQuit.getLayout();
+		flowLayout.setVgap(0);
+		flowLayout.setHgap(0);
+		panelQuit.setPreferredSize(new Dimension(85, 29));
+		GridBagConstraints gbc_panelQuit = new GridBagConstraints();
+		gbc_panelQuit.gridx = 1;
+		gbc_panelQuit.gridy = 6;
+		add(panelQuit, gbc_panelQuit);
+		
+		btnQuit = new JButton("Quit");
+		btnQuit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		btnQuit.setOpaque(false);
+		btnQuit.setForeground(Color.BLACK);
+		btnQuit.setFocusPainted(false);
+		btnQuit.setContentAreaFilled(false);
+		btnQuit.setBorderPainted(false);
+		btnQuit.setBackground(Color.BLACK);
+		panelQuit.add(btnQuit);
 	}
 }
