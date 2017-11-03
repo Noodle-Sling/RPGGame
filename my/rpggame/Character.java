@@ -2,14 +2,15 @@ package my.rpggame;
 
 public class Character {
 	int maxHealth;
-	static int health;
+	int health;
 	volatile boolean run;
 	/* String healthStatement;
 	switch (health) {
 	
 	}
 	 */
-	int dmgDice;
+	int minDmg;
+	int maxDmg;
 	int gold = 0;
 	int enemiesKilled = 0;
 
@@ -17,15 +18,17 @@ public class Character {
 		
 		switch (input) {
 		case "knight": 
-			maxHealth=100;
-			health=100;
-			dmgDice=2;
+			maxHealth = 90;
+			health = 90;
+			minDmg = 6;
+			maxDmg = 8;
 			System.out.println("Congratulations, you have chosen knight!");
 			break;
 		case "mage": 
-			maxHealth=50;
-			health=50;
-			dmgDice=3;
+			maxHealth = 60;
+			health = 60;
+			minDmg = 5;
+			maxDmg = 11;
 			System.out.println("Congratulations, you have chosen mage!");
 			break;
 		default: 
@@ -33,22 +36,20 @@ public class Character {
 			break; } 
 		}
 	
+	int calcDmg() {
+		return minDmg + (int)((maxDmg - minDmg + 1) * Math.random());
+	}
+	
 	void attack(Enemy enemy) {
-		for (int i = 0; i < dmgDice; i++) {
-			int realDmg = 1 + (int)(5 *Math.random());
-			enemy.health -= realDmg;
-			System.out.print(realDmg + " Damage! ");
-			if (enemy.health > 0) {
-				System.out.println("Enemy health: " + enemy.health + ".");
-			}
-			else {
-				killEnemy(enemy);
-				return;
-			}
-		}
+		int realDmg = calcDmg();
+		enemy.health -= realDmg;
+		System.out.print(realDmg + " Damage! ");
 		if (enemy.health > 0) {
-			health -= enemy.dmg;
-			System.out.println("Enemy does " + enemy.dmg + " damage. Player health: " + Character.health + "." );
+			System.out.println("Enemy health: " + enemy.health + ".");
+		}
+		else {
+			killEnemy(enemy);
+			return;
 		}
 	}
 	
@@ -58,11 +59,11 @@ public class Character {
 		gold += enemy.goldWorth;
 	}
 	
-	void checkStatus(Character player) {
-		System.out.println("Health: " + player.health + "/" + player.maxHealth);
-		System.out.println("Number of damage die rolls: " + player.dmgDice);
-		System.out.println("Gold: " + player.gold);
-		System.out.println("Enemies killed: " + player.enemiesKilled);
+	void checkStatus() {
+		System.out.println("Health: " + health + "/" + maxHealth);
+		System.out.println("Damage: " + minDmg + "-" + maxDmg);
+		System.out.println("Gold: " + gold);
+		System.out.println("Enemies killed: " + enemiesKilled);
 	}
 	
 	Thread isDead = new Thread(
@@ -70,8 +71,9 @@ public class Character {
 				public void 	run() {
 					while(run) {
 						if (health <= 0) { 
-							System.out.println("You have died! Please Log out to play again.") ;
-							run = false ; }
+							health = 0;
+							System.out.println("You have died! Please Log out to play again.");
+							run = false; }
 					}
 				}
 			});
