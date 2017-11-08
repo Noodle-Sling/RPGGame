@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 
 import javax.swing.ImageIcon;
 
-public class Arrow {
+public class Fireball {
 
 	private int x;
 	private int y;
@@ -14,20 +14,20 @@ public class Arrow {
 	private boolean vis;
 
 	private final int BOARD_WIDTH = 800;
-	private final int ARROW_SPEED = -3;
+	private final int FIREBALL_SPEED = 4;
 
 	private Image image;
 
 
-	public Arrow(int x, int y) {
+	public Fireball(int x, int y) {
 		this.x = x;
 		this.y = y;
 
-		initArrow();
+		initFireball();
 	}
 
-	private void initArrow() {
-		ImageIcon ii = new ImageIcon("Resources/arrow.png");
+	private void initFireball() {
+		ImageIcon ii = new ImageIcon("Resources/fireball.png");
 		image = ii.getImage();
 		width = image.getWidth(null);
 		height = image.getHeight(null);
@@ -35,7 +35,7 @@ public class Arrow {
 	}
 
 	public void move() {
-		x += ARROW_SPEED;
+		x += FIREBALL_SPEED;
 
 		if(x < 0) {
 			vis = false;

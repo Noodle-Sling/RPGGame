@@ -21,6 +21,7 @@ public class Enemy implements ActionListener{
 	private final float dy = 1;
 	private int width;
 	private int height;
+	private boolean vis;
 
 	private boolean up;
 	private boolean pause;
@@ -38,8 +39,8 @@ public class Enemy implements ActionListener{
 		switch (random) {
 		case 1: 
 			name = "Skeleton" ;
-			health=10;
-			dmg = 49;
+			health=20;
+			dmg = 10;
 			goldWorth = 10 ;
 			break;
 		case 2: 
@@ -63,6 +64,7 @@ public class Enemy implements ActionListener{
 		this.y = y;
 		width = image.getWidth(null);
 		height = image.getHeight(null);
+		vis =  true;
 		timer = new Timer(SHOOT_DELAY, this);
 		timer.start();
 	}
@@ -73,6 +75,13 @@ public class Enemy implements ActionListener{
 
 	public void damage(float damage) {
 		health -= damage;
+		if(health <= 0) {
+			vis = false;
+		}
+	}
+	
+	public boolean getVis() {
+		return vis;
 	}
 
 	public float getHealth() {
@@ -126,7 +135,7 @@ public class Enemy implements ActionListener{
 	}
 
 	public void fire() {
-		if(!pause) {
+		if(!pause && vis) {
 			arrows.add(new Arrow(x - width + 30, y + height /2 ));
 		}
 	}

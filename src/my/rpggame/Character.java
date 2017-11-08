@@ -9,7 +9,10 @@ import javax.swing.ImageIcon;
 public class Character {
 	private float maxHealth;
 	private float health;
-	volatile boolean run;
+	public volatile boolean run;
+	private float dmg;
+	
+	private String type;
 
 	private Image imageLeft;
 	private Image imageRight;
@@ -22,28 +25,23 @@ public class Character {
 	private int height;
 	private boolean pause;
 
-	private ArrayList<String> characters = new ArrayList<>();
-	int dmgDice;
-	int gold = 0;
-	int enemiesKilled = 0;
+	private ArrayList<Fireball> fireballs = new ArrayList<>();
 
 	Character(String in) {
 
-		characters.add("knight");
-		characters.add("mage");
-
 		String input = in;
+		type = input.toLowerCase();
 
 		switch (input) {
 		case "knight": 
 			maxHealth=100;
 			health=100;
-			dmgDice=2;
+			dmg = 8;
 			break;
 		case "mage": 
 			maxHealth=50;
 			health=50;
-			dmgDice=3;
+			dmg = 10;
 			break;
 		default: 
 			System.out.println("You didn't select a character.");
@@ -108,6 +106,14 @@ public class Character {
 	public void damage(float dmg) {
 		health -= dmg;
 	}
+	
+	public float getDamage() {
+		return dmg;
+	}
+	
+	public void attack(Enemy enemy) {
+		enemy.damage(dmg);
+	}
 
 	public void keyPressed(KeyEvent e) {
 		if(!pause) {
@@ -129,6 +135,15 @@ public class Character {
 
 			if(key == KeyEvent.VK_DOWN) {
 				dy += 1;
+			}
+			
+			if(key == KeyEvent.VK_SPACE) {
+				if(type.equals("mage")) {
+					fire();
+				}
+				else if(type.equals("knight")) {
+					swing();
+				}
 			}
 		}
 	}
@@ -153,14 +168,22 @@ public class Character {
 			dy = 0;
 		}
 	}
-
-
-
-	void killEnemy(Enemy enemy) {
-		System.out.println("You killed the " + enemy.getName() + "! " + enemy.getGoldWorth() + " gold earned.");
-		enemiesKilled++;
-		gold += enemy.getGoldWorth();
+	
+	public void fire() {
+		if(!pause) {
+			fireballs.add(new Fireball(x - width + 30, y + height /2 ));
+		}
 	}
+	
+	public void swing() {
+		
+	}
+	
+	public ArrayList<Fireball> getFireballs() {
+		return fireballs;
+	}
+
+
 
 	Thread isDead = new Thread(
 			new Runnable() {
