@@ -14,13 +14,15 @@ import javax.swing.Box;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class PlayerDied extends JPanel {
+public class EndGame extends JPanel {
 	
 	private ActionListener quit;
 	private ActionListener mainMenu;
+	private String end;
 	
-	public PlayerDied(ActionListener main) {
+	public EndGame(ActionListener main, String end) {
 		this.mainMenu = main;
+		this.end = end;
 		
 		setOpaque(false);
 		setBounds(new Rectangle(0, 0, 800, 600));
@@ -31,7 +33,13 @@ public class PlayerDied extends JPanel {
 		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gbl_panel);
 		
-		JLabel lblYouHaveDied = new JLabel("<html><div style=‘text-align: center;’> You have died. <br> Please return to the main menu or exit the game.  </div></html>\n");
+		JLabel lblYouHaveDied;
+		if(end.equals("win")) {
+			lblYouHaveDied = new JLabel("<html><div style=‘text-align: center;’> Congratulations! <br> You have won. <br> Please return to the main menu or exit the game.  </div></html>\n");
+		}
+		else {
+			lblYouHaveDied = new JLabel("<html><div style=‘text-align: center;’> You have died. <br> Please return to the main menu or exit the game.  </div></html>\n");
+		}
 		lblYouHaveDied.setForeground(Color.WHITE);
 		lblYouHaveDied.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints gbc_lblYouHaveDied = new GridBagConstraints();

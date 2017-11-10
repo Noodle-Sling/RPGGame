@@ -12,12 +12,13 @@ import javax.swing.Timer;
 public class Enemy implements ActionListener{
 	private String name;
 	private float health;
+	private float maxHealth;
 	private float dmg;
 	private float goldWorth;
 
 	private int x;
 	private int y;
-	private final float dx = 1;
+	private final float dx = 2;
 	private final float dy = 1;
 	private int width;
 	private int height;
@@ -39,13 +40,15 @@ public class Enemy implements ActionListener{
 		switch (random) {
 		case 1: 
 			name = "Skeleton" ;
-			health=20;
+			maxHealth=20;
+			health = maxHealth;
 			dmg = 10;
 			goldWorth = 10 ;
 			break;
 		case 2: 
 			name = "Wolf";
-			health=25;
+			maxHealth=25;
+			health = maxHealth;
 			dmg=8;
 			goldWorth=3;
 			break;
@@ -83,9 +86,21 @@ public class Enemy implements ActionListener{
 	public boolean getVis() {
 		return vis;
 	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
 
 	public float getHealth() {
 		return health;
+	}
+	
+	public float getMaxHealth() {
+		return maxHealth;
 	}
 
 	public float getDmg() {
@@ -120,7 +135,7 @@ public class Enemy implements ActionListener{
 				y -= dy;
 			}
 			else {
-				y += dx;
+				y += dy;
 			}
 			x -= dx;
 		}
@@ -150,7 +165,7 @@ public class Enemy implements ActionListener{
 	}
 
 	public Rectangle getBounds() {
-		return new Rectangle(x,y,width,height);
+		return new Rectangle(x + width/2,y,width/2,height);
 	}
 
 	public void attack(Character player) {

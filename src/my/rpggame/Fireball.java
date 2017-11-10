@@ -14,14 +14,17 @@ public class Fireball {
 	private boolean vis;
 
 	private final int BOARD_WIDTH = 800;
-	private final int FIREBALL_SPEED = 4;
+	private int FIREBALL_SPEED = 4;
 
 	private Image image;
 
 
-	public Fireball(int x, int y) {
+	public Fireball(int x, int y, String direction) {
 		this.x = x;
 		this.y = y;
+		if(direction.equals("left")) {
+			FIREBALL_SPEED *= -1;
+		}
 
 		initFireball();
 	}

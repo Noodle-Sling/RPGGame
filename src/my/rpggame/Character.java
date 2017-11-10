@@ -11,7 +11,9 @@ public class Character {
 	private float health;
 	public volatile boolean run;
 	private float dmg;
-	
+	private boolean fired;
+	private String direction;
+
 	private String type;
 
 	private Image imageLeft;
@@ -47,6 +49,7 @@ public class Character {
 			System.out.println("You didn't select a character.");
 			break; 
 		} 
+
 		ImageIcon il = new ImageIcon("Resources/" + input + "_left.png");
 		imageLeft = il.getImage();
 		ImageIcon ir = new ImageIcon("Resources/" +input + "_right.png");
@@ -54,6 +57,7 @@ public class Character {
 		image = imageRight;
 		width = image.getWidth(null);
 		height = image.getHeight(null);
+		direction = "right";
 		x = 40;
 		y = 60;
 		isDead.start();
@@ -79,6 +83,14 @@ public class Character {
 		}
 	}
 
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
 	public int getX() {
 		return x;
 	}
@@ -98,19 +110,23 @@ public class Character {
 	public Rectangle getBounds() {
 		return new Rectangle(x,y,width,height);
 	}
-	
+
 	public float getHealth() {
 		return health;
+	}
+
+	public float getMaxHealth() {
+		return maxHealth;
 	}
 
 	public void damage(float dmg) {
 		health -= dmg;
 	}
-	
+
 	public float getDamage() {
 		return dmg;
 	}
-	
+
 	public void attack(Enemy enemy) {
 		enemy.damage(dmg);
 	}
@@ -122,11 +138,13 @@ public class Character {
 			if(key == KeyEvent.VK_LEFT) {	
 				dx -= 1;
 				image = imageLeft;
+				direction = "left";
 			}
 
 			if(key == KeyEvent.VK_RIGHT) {
 				dx += 1;
 				image = imageRight;
+				direction = "right";
 			}
 
 			if(key == KeyEvent.VK_UP) {
@@ -136,13 +154,16 @@ public class Character {
 			if(key == KeyEvent.VK_DOWN) {
 				dy += 1;
 			}
-			
+
 			if(key == KeyEvent.VK_SPACE) {
-				if(type.equals("mage")) {
-					fire();
-				}
-				else if(type.equals("knight")) {
-					swing();
+				if(!fired) {
+					if(type.equals("mage")) {
+						fire();
+					}
+					else if(type.equals("knight")) {
+						swing();
+					}
+					fired = true;
 				}
 			}
 		}
@@ -167,18 +188,27 @@ public class Character {
 		if (key == KeyEvent.VK_DOWN) {
 			dy = 0;
 		}
-	}
-	
-	public void fire() {
-		if(!pause) {
-			fireballs.add(new Fireball(x - width + 30, y + height /2 ));
+
+		if (key == KeyEvent.VK_SPACE) {
+			fired = false;
 		}
 	}
-	
-	public void swing() {
-		
+
+	public void fire() {
+		if(!pause) {
+			if(direction.equals("left")) {
+				fireballs.add(new Fireball(x, y+height/2, direction));
+			}
+			else {
+				fireballs.add(new Fireball(x + width, y + height /2, direction));
+			}
+		}
 	}
-	
+
+	public void swing() {
+
+	}
+
 	public ArrayList<Fireball> getFireballs() {
 		return fireballs;
 	}
